@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="custom-input group flex flex-col gap-1"
+  >
+    <div
+      class="relative flex flex-col"
+    >
+      <input
+        class="rounded-sm border-none bg-surface-50 px-4 text-neutral-600 outline-none ring-1 ring-surface-400 placeholder:text-neutral-100 focus:placeholder:text-primary-100 disabled:bg-neutral-30 disabled:text-neutral-100 dark:bg-surface-200 dark:disabled:bg-surface-400  ring-neutral-50 focus:ring-primary-500 dark:focus:ring-primary-300"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
