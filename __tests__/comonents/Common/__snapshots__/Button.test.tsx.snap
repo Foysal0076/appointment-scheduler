@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button component matches snapshot 1`] = `
+<DocumentFragment>
+  <button
+    class="relative select-none rounded text-white focus:ring-4 disabled:active:transform-none active:scale-[.9] disabled:cursor-not-allowed transition-all duration-300 text-nowrap focus:outline-none font-medium bg-primary-500 disabled:text-primary-200 disabled:bg-primary-50 hover:bg-primary-600 focus:ring-primary-100 focus:outline-primary-200  h-[2.5rem] text-md px-4"
+  >
+    <div
+      class="visible font-Rubik"
+    />
+  </button>
+</DocumentFragment>
+`;
