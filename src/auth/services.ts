@@ -21,7 +21,7 @@ const authenticateUser = async (email: string, password: string) => {
   } catch (error) {
     console.log(error)
   }
-  console.log(accessToken)
+
   return {
     id: userCredential.user.uid,
     name: username,

@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
         const user = await authService.authenticateUser(email, password)
         if (user) {
           // Update the id property to be of type string
-          console.log(user)
+
           return { ...user } as User
         } else {
           // If you return null then an error will be displayed advising the user to check their details.

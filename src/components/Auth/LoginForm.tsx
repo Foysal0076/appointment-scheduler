@@ -1,44 +1,12 @@
 'use client'
-import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
 
+import { useLoginForm } from '@/components/Auth/useLoginForm'
 import Button from '@/components/Common/Button'
 import { Input } from '@/components/Common/Input'
 
-type FormValueTypes = {
-  email: string
-  password: string
-}
-
-const loginFormSchema = yup.object().shape({
-  email: yup.string().email().required('Email is required'),
-  password: yup
-    .string()
-    .required('Password is required')
-    .min(6, { message: 'Password must be at least 6 characters' }),
-})
-
 const LoginForm = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<FormValueTypes>({
-    resolver: yupResolver(loginFormSchema),
-    mode: 'all',
-  })
-
-  const onsubmit = async (data: FormValueTypes) => {
-    await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      callbackUrl: '/dashboard',
-    })
-  }
-
+  const { handleSubmit, onsubmit, errors, register, loading } = useLoginForm()
   return (
     <div className='flex h-[80vh] items-center justify-center'>
       <div className='w-full rounded-lg border bg-surface-0 p-8 shadow-md dark:bg-surface-100 md:max-w-96'>
@@ -60,7 +28,7 @@ const LoginForm = () => {
             {...register('password')}
             error={errors?.password ? errors.password.message : ''}
           />
-          <Button type='submit' className='mt-2 w-full'>
+          <Button type='submit' className='mt-2 w-full' loading={loading}>
             Login
           </Button>
           <Link
