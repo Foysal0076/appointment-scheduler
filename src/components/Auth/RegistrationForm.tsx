@@ -1,42 +1,13 @@
 'use client'
-import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
 
+import { useRegistrationForm } from '@/components/Auth/useRegistrationForm'
 import Button from '@/components/Common/Button'
 import { Input } from '@/components/Common/Input'
 
-type FormValueTypes = {
-  fullname: string
-  email: string
-  password: string
-}
-
-const registrationFormSchema = yup.object().shape({
-  fullname: yup.string().required('Full Name is required'),
-  email: yup.string().email().required('Email is required'),
-  password: yup
-    .string()
-    .required('Password is required')
-    .min(6, { message: 'Password must be at least 6 characters' }),
-})
-
 const RegistrationForm = () => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    register,
-    formState: { errors },
-  } = useForm<FormValueTypes>({
-    resolver: yupResolver(registrationFormSchema),
-    mode: 'all',
-  })
-
-  const onsubmit = (data: FormValueTypes) => {
-    console.log(data)
-  }
+  const { onsubmit, handleSubmit, register, loading, errors } =
+    useRegistrationForm()
 
   return (
     <div className='flex h-[80vh] items-center justify-center'>
@@ -65,7 +36,7 @@ const RegistrationForm = () => {
             {...register('password')}
             error={errors?.password ? errors.password.message : ''}
           />
-          <Button type='submit' className='mt-2 w-full'>
+          <Button type='submit' className='mt-2 w-full' loading={loading}>
             Register
           </Button>
           <Link

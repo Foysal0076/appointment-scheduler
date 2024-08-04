@@ -1,50 +1,33 @@
-const jwt = require('jsonwebtoken')
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
-import { dummyUsers } from './dummyData'
+import { auth } from '@/utils/firebase'
+import { queryUserById } from '@/utils/firebase/queries'
 
-const authenticateUser = (email: string, password: string) => {
-  // You should replace this with a real authentication logic
-  const dummyUser = dummyUsers.find(
-    (user) => user.email === email && user.password === password
-  )
-  if (!dummyUser) {
-    throw new Error('User is not registered')
-  }
+const authenticateUser = async (email: string, password: string) => {
+  if (!email || !password) return
 
-  if (password !== dummyUser.password) {
-    throw new Error('Invalid password')
-  }
+  // First sign user with the email in firebase
+  const userCredential = await signInWithEmailAndPassword(auth, email, password)
 
-  const jsonwebtoken = jwt.sign(
-    {
-      id: dummyUser.id,
-      name: dummyUser.name,
-      email: dummyUser.email,
-      iat: Math.floor(Date.now() / 1000),
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: 7 * 24 * 60 * 60 } //7 days
-  )
+  // userInfo from database
+  const userInfo: any = await queryUserById(userCredential.user.uid)
 
-  return {
-    id: dummyUser.id,
-    name: dummyUser.name,
-    email: dummyUser.email,
-    token: jsonwebtoken,
-  }
-}
+  const username: string = userInfo.length > 0 ? userInfo[0].fullname : 'N/A'
 
-//verify token
-const verifyToken = (token: string) => {
+  let accessToken = ''
   try {
-    const bearerToken =
-      token.split(' ')[0] === 'Bearer' ? token.split(' ')[1] : token
-    const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET)
-    return decoded
-  } catch (error: any) {
-    console.log(error.message)
-    throw error
+    const idTokenResult = await userCredential.user.getIdTokenResult()
+    accessToken = idTokenResult.token
+  } catch (error) {
+    console.log(error)
+  }
+  console.log(accessToken)
+  return {
+    id: userCredential.user.uid,
+    name: username,
+    email: userCredential.user.email,
+    accessToken,
   }
 }
 
-export const authService = { authenticateUser, verifyToken }
+export const authService = { authenticateUser }

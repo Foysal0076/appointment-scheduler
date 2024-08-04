@@ -1,7 +1,6 @@
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { NextResponse } from 'next/server'
 
-import { firebaseAuth } from '@/utils/firebase'
+import { authService } from '@/auth/services'
 
 export async function POST(request: Request) {
   try {
@@ -21,20 +20,13 @@ export async function POST(request: Request) {
       )
     }
 
-    // sign up the user & add firestore data
-    signInWithEmailAndPassword(firebaseAuth, email, password)
-      .then((cred) => {
-        return NextResponse.json(cred.user)
-      })
-      .catch((error) => {
-        console.log(error)
-        return NextResponse.json(
-          { message: error.message },
-          { status: error.code }
-        )
-      })
+    const userData = authService.authenticateUser(email, password)
+
+    return NextResponse.json({
+      message: 'User signed in successfully',
+      user: userData,
+    })
   } catch (error) {
-    console.log(error)
     return NextResponse.json(
       { message: 'Something went wrong' },
       { status: 500 }

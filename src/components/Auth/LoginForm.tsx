@@ -1,6 +1,7 @@
 'use client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -22,9 +23,7 @@ const loginFormSchema = yup.object().shape({
 
 const LoginForm = () => {
   const {
-    control,
     handleSubmit,
-    reset,
     register,
     formState: { errors },
   } = useForm<FormValueTypes>({
@@ -32,8 +31,12 @@ const LoginForm = () => {
     mode: 'all',
   })
 
-  const onsubmit = (data: FormValueTypes) => {
-    console.log(data)
+  const onsubmit = async (data: FormValueTypes) => {
+    await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      callbackUrl: '/dashboard',
+    })
   }
 
   return (

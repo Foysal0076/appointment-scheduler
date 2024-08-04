@@ -24,10 +24,11 @@ export const authOptions: NextAuthOptions = {
           email: string
           password: string
         }
-        const user = authService.authenticateUser(email, password)
+        const user = await authService.authenticateUser(email, password)
         if (user) {
           // Update the id property to be of type string
-          return { ...user, accessToken: user.token } as User
+          console.log(user)
+          return { ...user } as User
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null
@@ -125,7 +126,7 @@ export const authOptions: NextAuthOptions = {
         token.id = _user.id
         token.name = _user.name
         token.email = _user.email
-        token.accessToken = _user?.token ?? null
+        token.accessToken = _user?.accessToken ?? null
       }
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account?.access_token) {
@@ -143,11 +144,6 @@ export const authOptions: NextAuthOptions = {
      */
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
-      //check the accessToken.. if accessToken is expired, then return null
-      if (token?.accessToken) {
-        const isValid = authService.verifyToken(`Bearer ${token.accessToken}`)
-        if (!isValid) return { expires: new Date().toString() }
-      }
       session.accessToken = token.accessToken
       session.user.id = token.id
       session.user.accessToken = token.accessToken

@@ -1,7 +1,9 @@
 import '@/styles/globals.css'
 import '@/styles/globals.scss'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { Inter, Rubik } from 'next/font/google'
+import { ToastContainer } from 'react-toastify'
 
 import { AuthProvider } from '@/auth/AuthProvider'
 import NextThemeProvider from '@/components/Common/NextThemeProvider'
@@ -53,6 +55,16 @@ export default function RootLayout({
             </div>
           </NextThemeProvider>
         </AuthProvider>
+        <ToastContainer
+          position='top-right'
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          draggable
+          pauseOnHover
+          pauseOnFocusLoss={false}
+        />
       </body>
     </html>
   )

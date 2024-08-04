@@ -11,8 +11,17 @@ const NavbarAuthMenu = () => {
   const user = session?.user
   const initial = createInitials(user?.name ?? '')
 
-  const handleLogout = () => {
-    signOut({ callbackUrl: '/' })
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      signOut({ callbackUrl: '/' })
+    } catch (error) {
+      console.log(error)
+      signOut({ callbackUrl: '/' })
+    }
   }
 
   return (

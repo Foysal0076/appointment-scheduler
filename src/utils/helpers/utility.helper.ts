@@ -13,6 +13,7 @@ export const removeLocalStorageItem = (key: string) => {
 
 export const createInitials = (name: string = '', length: 1 | 2 = 2) => {
   if (!name) return ''
+  if (typeof name !== 'string') return ''
   return name
     .split(' ')
     .map((n) => n[0])
