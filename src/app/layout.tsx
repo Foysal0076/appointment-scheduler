@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 import '@/styles/globals.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { NextUIProvider } from '@nextui-org/react'
 import { Inter, Rubik } from 'next/font/google'
 import { ToastContainer } from 'react-toastify'
 
@@ -45,15 +46,17 @@ export default function RootLayout({
       />
       <body>
         <AuthProvider>
-          <NextThemeProvider>
-            <div className='flex min-h-screen flex-col justify-between bg-surface-50 pt-[3.75rem] md:pt-[4.5rem]'>
-              <div>
-                <Navbar />
-                <main>{children}</main>
+          <NextUIProvider>
+            <NextThemeProvider>
+              <div className='flex min-h-screen flex-col justify-between bg-surface-50 pt-[3.75rem] md:pt-[4.5rem]'>
+                <div>
+                  <Navbar />
+                  <main>{children}</main>
+                </div>
+                <Footer />
               </div>
-              <Footer />
-            </div>
-          </NextThemeProvider>
+            </NextThemeProvider>
+          </NextUIProvider>
         </AuthProvider>
         <ToastContainer
           position='top-right'

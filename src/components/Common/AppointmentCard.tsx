@@ -1,5 +1,6 @@
 import OutlinedButton from '@/components/Common/OutlinedButton'
 import { HOUR_FORMAT } from '@/utils/constants/appointment.constants'
+import { formatDate, formatTime } from '@/utils/helpers'
 import {
   AppointmentStatusType,
   AppointmentUser,
@@ -29,30 +30,15 @@ const AppointmentCard = ({
   appointmentId,
   hourFormat = HOUR_FORMAT.h12,
 }: AppointmentCardProps) => {
-  const date = startTime.toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
   const isHost = host.id === userId
   const isRejected = status === 'rejected'
 
   return (
     <div className='flex h-full flex-col justify-between rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
       <div className='grow'>
-        <h2 className='h3 mb-2'>{date}</h2>
+        <h2 className='h3 mb-2'>{formatDate(startTime)}</h2>
         <p className='h5 mb-4 font-bold'>
-          {startTime.toLocaleTimeString(undefined, {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: hourFormat === HOUR_FORMAT.h12,
-          })}{' '}
-          -{' '}
-          {endTime.toLocaleTimeString(undefined, {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: hourFormat === HOUR_FORMAT.h12,
-          })}
+          {formatTime(startTime)} - {formatTime(endTime)}
         </p>
         <h3 className='h6 mb-4'>{title}</h3>
         <p className='mb-4 text-sm text-neutral-700'>

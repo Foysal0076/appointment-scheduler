@@ -4,6 +4,7 @@ module.exports = {
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -222,8 +223,8 @@ module.exports = {
         xl: 'var(--box-shadow-xl)',
         '2xl': 'var(--box-shadow-2-xl)',
         '3xl': 'var(--box-shadow-3-xl)',
-        'top': 'var(--box-shadow-top)',
-        'bottom': 'var(--box-shadow-bottom)',
+        top: 'var(--box-shadow-top)',
+        bottom: 'var(--box-shadow-bottom)',
       },
       blur: {
         sm: 'var(--backgroundblur-sm-backdrop-filter)',
@@ -258,5 +259,6 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
+    require('@nextui-org/react'),
   ],
 }
