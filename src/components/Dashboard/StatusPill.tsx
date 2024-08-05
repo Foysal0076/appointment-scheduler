@@ -13,7 +13,7 @@ const StatusPill = ({ active, onClick, status }: Props) => {
       className={clsx(
         'select-none rounded-full border px-2 py-1 text-sm capitalize transition-colors duration-200 md:text-base',
         {
-          'border-primary-300 bg-primary-400/10 text-black hover:bg-primary-400/50':
+          'border-primary-300 bg-primary-400/10 text-neutral-700 hover:bg-primary-400/50':
             !active,
         },
         { 'border-primary-500 bg-primary-400 text-white': active }

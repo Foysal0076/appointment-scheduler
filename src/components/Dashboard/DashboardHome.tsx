@@ -2,6 +2,7 @@
 import { useState } from 'react'
 
 import Button from '@/components/Common/Button'
+import Appointments from '@/components/Dashboard/Appointments'
 import AppointmentStatusFilter from '@/components/Dashboard/AppointmentStatusFilter'
 import { AppointmentFiltersType } from '@/utils/types/appointment.types'
 
@@ -15,6 +16,7 @@ const DashboardHome = () => {
       </div>
       <AppointmentStatusFilter values={filters} setValues={setFilters} />
       <div className='mb-6 md:mb-8' />
+      <Appointments appointments={[]} />
     </div>
   )
 }

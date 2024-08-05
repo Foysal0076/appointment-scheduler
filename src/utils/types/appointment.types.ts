@@ -1,10 +1,31 @@
 import {
-  AppointmentFilters,
-  AppointmentStatus,
-} from '../constants/appointment.constants'
+  APPOINTMENT_FILTERS,
+  APPOINTMENT_STATUS,
+  HOUR_FORMAT,
+} from '@/utils/constants/appointment.constants'
 
 export type AppointmentStatusType =
-  (typeof AppointmentStatus)[keyof typeof AppointmentStatus]
+  (typeof APPOINTMENT_STATUS)[keyof typeof APPOINTMENT_STATUS]
 
 export type AppointmentFiltersType =
-  (typeof AppointmentFilters)[keyof typeof AppointmentFilters]
+  (typeof APPOINTMENT_FILTERS)[keyof typeof APPOINTMENT_FILTERS]
+
+export type HourFormat = (typeof HOUR_FORMAT)[keyof typeof HOUR_FORMAT]
+
+export type AppointmentUser = {
+  id: string
+  name: string
+  email: string
+}
+
+export type Appointment = {
+  id: string
+  title: string
+  audioMessage?: string
+  host: AppointmentUser
+  guest: AppointmentUser
+  status: AppointmentStatusType
+  startTime: Date
+  endTime: Date
+  hourFormat: HourFormat
+}

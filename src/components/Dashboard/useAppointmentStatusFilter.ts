@@ -1,7 +1,7 @@
-import { AppointmentFilters } from '@/utils/constants/appointment.constants'
+import { APPOINTMENT_FILTERS } from '@/utils/constants/appointment.constants'
 import { AppointmentFiltersType } from '@/utils/types/appointment.types'
 
-const filters = Object.values(AppointmentFilters)
+const filters = Object.values(APPOINTMENT_FILTERS)
 
 export const useAppointmentStatusFilter = (
   values: AppointmentFiltersType[],
