@@ -1,9 +1,7 @@
+import DashboardHome from '@/components/Dashboard/DashboardHome'
+
 const DashboardHomePage = () => {
-  return (
-    <div>
-      <h1 className='h1'>Dashboard</h1>
-    </div>
-  )
+  return <DashboardHome />
 }
 
 export default DashboardHomePage
