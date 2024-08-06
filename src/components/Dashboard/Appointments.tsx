@@ -35,7 +35,7 @@ const Appointments = ({ appointments }: Props) => {
         userId={userId}
       />
       <AppointmentCard
-        key={'appointment.id'}
+        key={'appointment.idd'}
         title={'appointment.title'}
         host={{
           id: 'appointment.host.id',

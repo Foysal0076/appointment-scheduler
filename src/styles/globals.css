@@ -244,4 +244,30 @@
   .h6 {
     @apply text-[1.125rem] font-normal leading-[1.375rem] md:text-[1.375rem] md:leading-[1.625rem];
   }
+
+  .custom-react-select-container .custom-react-select__control {
+    @apply h-[2.625rem] border border-[#6b7280] bg-surface-100 hover:border-[#6b7280];
+  }
+
+  .custom-react-select-container .custom-react-select__control--is-focused {
+    @apply border-primary-500 shadow-none;
+  }
+
+  .custom-react-select-container .custom-react-select__indicator-separator {
+    @apply bg-surface-400;
+  }
+
+  .custom-react-select-container .custom-react-select__input-container,
+  .custom-react-select-container .custom-react-select__placeholder,
+  .custom-react-select-container .custom-react-select__single-value {
+    @apply text-neutral-700;
+  }
+}
+
+.custom-react-select__menu {
+  @apply border border-neutral-30 dark:!bg-surface-200;
+}
+
+.custom-react-select__option {
+  @apply bg-surface-200 text-neutral-700 hover:bg-surface-400 dark:text-neutral-900 dark:hover:bg-surface-500;
 }

@@ -42,3 +42,27 @@ export const formatDate = (dateTime: Date) => {
     year: 'numeric',
   })
 }
+
+export const addMinuteToTime = (date: Date, minutes: number) => {
+  return new Date(date.getTime() + minutes * 60000)
+}
+
+export const subtractMinuteFromTime = (date: Date, minutes: number) => {
+  return new Date(date.getTime() - minutes * 60000)
+}
+
+export const getNextDivisibleBy15Minute = (date: Date): Date => {
+  const minutes = date.getMinutes()
+  const nextDivisibleBy15 = Math.ceil(minutes / 15) * 15
+  date.setMinutes(nextDivisibleBy15)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
+  return date
+}
+
+export const filterPassedTime = (time: Date): boolean => {
+  const currentDate = new Date()
+  const selectedDate = new Date(time)
+
+  return currentDate.getTime() < selectedDate.getTime()
+}
