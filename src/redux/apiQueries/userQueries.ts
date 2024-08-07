@@ -14,4 +14,8 @@ export const userQueries = apiSlice.injectEndpoints({
   }),
 })
 
-export const { useFetchUsersQuery } = userQueries
+export const {
+  useFetchUsersQuery,
+  useLazyFetchUsersQuery,
+  usePrefetch: usePrefetchUsers,
+} = userQueries

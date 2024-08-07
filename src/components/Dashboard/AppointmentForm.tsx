@@ -59,11 +59,12 @@ const durationOptions = [
 ]
 
 type Props = {
+  userId: string | null
   appointment?: Appointment
   onCancel: () => void
 }
 
-const AppointmentForm = ({ appointment, onCancel }: Props) => {
+const AppointmentForm = ({ userId, appointment, onCancel }: Props) => {
   const isEdit = !!appointment
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const { data: userResponse, isLoading: isFetchingUsers } = useFetchUsersQuery(
@@ -107,9 +108,11 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
         value: user.id,
       }))
       setOptions(options)
-      onChangeGuest(options[0])
+      const selectedUser =
+        options.find((option) => option.value === userId) ?? options[0]
+      onChangeGuest(selectedUser)
     }
-  }, [userResponse])
+  }, [userResponse, userId])
 
   return (
     <div className='w-[85vw] md:max-w-lg'>
