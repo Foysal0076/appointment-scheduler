@@ -43,3 +43,12 @@ export type AppointmentItem = {
   guestId: string
   guestInfo: AppointmentUser
 }
+
+export type InputFormData = {
+  title: string
+  description: string
+  audioFile: File | Blob | null
+  duration: number
+  guest: { value: string; label: string }
+  date: Date
+}

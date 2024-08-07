@@ -11,7 +11,7 @@ type Props = {
 const Appointments = ({ appointments }: Props) => {
   const { user } = useUserInfo()
   const userId = user?.id as unknown as string
-
+  console.log(appointments)
   if (appointments.length === 0) {
     return (
       <div className='flex h-32 items-center justify-center'>

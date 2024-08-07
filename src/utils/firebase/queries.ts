@@ -10,9 +10,10 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 import { PutAppointmentBody } from '@/redux/apiQueries/apiQueries.type'
-import { db } from '@/utils/firebase'
+import { db, storage } from '@/utils/firebase'
 import { capitalize } from '@/utils/helpers'
 import { AppointmentItem } from '@/utils/types/appointment.types'
 
@@ -81,43 +82,6 @@ export const getAppointments = async ({
   isUpcoming?: boolean
   isPast?: boolean
 }) => {
-  // try {
-  //   const getAll = (!isPast && !isUpcoming) || (isPast && isUpcoming)
-  //   const appointmentRef = collection(db, 'appointments')
-
-  //   const q = getAll
-  //     ? query(
-  //         appointmentRef,
-  //         where('hostId', '==', hostId),
-  //         orderBy('startTime', 'asc')
-  //       )
-  //     : isPast
-  //       ? query(
-  //           appointmentRef,
-  //           where('hostId', '==', hostId),
-  //           where('endTime', '<', new Date().getTime()),
-  //           orderBy('startTime', 'asc')
-  //         )
-  //       : query(
-  //           appointmentRef,
-  //           where('hostId', '==', hostId),
-  //           where('endTime', '>', new Date().getTime()),
-  //           orderBy('startTime', 'asc')
-  //         )
-  //   // const q = query(appointmentRef, where('hostId', '==', hostId))
-  //   const querySnapshot = await getDocs(q)
-  //   const result: any[] = []
-
-  //   querySnapshot.forEach(async (doc) => {
-  //     const id = doc.id
-  //     const data = doc.data()
-  //     result.push({ ...data, id })
-  //   })
-  //   return result
-  // } catch (error) {
-  //   console.error('Error getting appointments: ', error)
-  //   throw error
-  // }
   try {
     const getAll = (!isPast && !isUpcoming) || (isPast && isUpcoming)
     const appointmentRef = collection(db, 'appointments')
@@ -219,6 +183,18 @@ export const deleteAppointment = async (id: string) => {
     return { message: 'Appointment cancelled' }
   } catch (error) {
     console.error('Error deleting document: ', error)
+    throw error
+  }
+}
+
+export const uploadFile = async (file: File | Blob, path: string) => {
+  try {
+    const storageRef = ref(storage, `${path}`)
+    await uploadBytes(storageRef, file)
+    const url = await getDownloadURL(storageRef)
+    return url
+  } catch (error) {
+    console.error('Error uploading file: ', error)
     throw error
   }
 }

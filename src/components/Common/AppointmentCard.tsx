@@ -23,6 +23,7 @@ const AppointmentCard = ({
   id,
   title,
   description,
+  audioMessage,
   hostInfo,
   guestInfo,
   userId,
@@ -102,6 +103,9 @@ const AppointmentCard = ({
         <p className='mb-4 line-clamp-4 text-base text-neutral-400'>
           {description}
         </p>
+        <div className='mb-4'>
+          {audioMessage && <audio src={audioMessage} controls />}
+        </div>
       </div>
       <div>
         <p className='mb-4 text-xs text-neutral-700 md:text-sm'>

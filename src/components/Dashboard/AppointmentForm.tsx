@@ -11,6 +11,7 @@ import Button from '@/components/Common/Button'
 import { Input } from '@/components/Common/Input'
 import OutlinedButton from '@/components/Common/OutlinedButton'
 import AppointmentConfirmModal from '@/components/Dashboard/AppointmentConfirmModal'
+import AudioMessage from '@/components/Dashboard/AudioMessage'
 import { useAppointmentFormData } from '@/components/Dashboard/useAppointmentFormData'
 import { useFetchUsersQuery } from '@/redux/apiQueries/userQueries'
 import { filterPassedTime } from '@/utils/helpers'
@@ -78,6 +79,7 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
     onChangeDate,
     onChangeTitle,
     onChangeDescription,
+    onChangeAudioFile,
   } = useAppointmentFormData()
 
   const handleOpenConfirmModal = () => {
@@ -139,6 +141,15 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
         </div>
         <div className='flex flex-col'>
           <label htmlFor='guest-select' className='mb-2 font-bold'>
+            Audio message
+          </label>
+          <AudioMessage
+            setAudioFile={onChangeAudioFile}
+            audioFile={formData.audioFile}
+          />
+        </div>
+        <div className='flex flex-col'>
+          <label htmlFor='guest-select' className='mb-2 font-bold'>
             Select Duration <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <select
@@ -167,7 +178,6 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
             menuPortalTarget={document.body}
             isSearchable
             menuShouldScrollIntoView={false}
-            isClearable
             menuPlacement='auto'
             theme={reactSelectTheme}
             isLoading={isFetchingUsers}

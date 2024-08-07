@@ -6,8 +6,10 @@ import { HourFormat } from '@/utils/types/appointment.types'
 
 type AppointmentSummaryCardProps = {
   title: string
+  description: string
   host: string // the person who scheduled the appointment
   guest: string // the person who is invited for the appointment
+  audioFile?: File | Blob | null
   startTime: Date
   endTime: Date
   hourFormat?: HourFormat
@@ -19,9 +21,11 @@ type AppointmentSummaryCardProps = {
 const AppointmentSummaryCard = ({
   host,
   guest,
+  audioFile,
   startTime,
   endTime,
   title,
+  description,
   hourFormat = HOUR_FORMAT.h12,
   onSubmit,
   onCancel,
@@ -36,6 +40,10 @@ const AppointmentSummaryCard = ({
           {formatTime(endTime, hourFormat)}
         </p>
         <h3 className='h6 mb-4'>{title}</h3>
+        <p className='mb-4 line-clamp-4'>{description}</p>
+        <div className='mb-4'>
+          {audioFile && <audio src={URL.createObjectURL(audioFile)} controls />}
+        </div>
         <p className='mb-4 text-sm text-neutral-700'>
           Participants: {host} and {guest}
         </p>

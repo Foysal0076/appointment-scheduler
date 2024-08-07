@@ -29,11 +29,13 @@ export async function POST(request: Request) {
       title,
       description,
       guestInfo,
+      audioMessage,
     }: PostAppointmentBody = await request.json()
 
     const formData: Omit<AppointmentItem, 'id'> = {
       title,
       description,
+      audioMessage,
       guestId,
       guestInfo,
       startTime,

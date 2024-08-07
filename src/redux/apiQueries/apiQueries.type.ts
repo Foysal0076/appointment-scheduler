@@ -14,6 +14,7 @@ export type PostAppointmentBody = {
   status: AppointmentStatusType
   title: string
   description: string
+  audioMessage?: string
   startTime: number // Date.getTime()
   endTime: number // Date.getTime()
 }

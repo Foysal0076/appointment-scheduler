@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
 import { getNextDivisibleBy15Minute } from '@/utils/helpers'
+import { InputFormData } from '@/utils/types/appointment.types'
 
 export const useAppointmentFormData = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<InputFormData>({
     title: '',
     description: '',
+    audioFile: null,
     duration: 30,
     guest: { value: '', label: '' },
     date: getNextDivisibleBy15Minute(new Date()), // actually next minute that is divisible by 15
@@ -38,6 +40,10 @@ export const useAppointmentFormData = () => {
     onChangeFormData('description', e.target.value)
   }
 
+  const onChangeAudioFile = (audio: File | Blob | null) => {
+    onChangeFormData('audioFile', audio)
+  }
+
   return {
     formData,
     onChangeDuration,
@@ -45,5 +51,6 @@ export const useAppointmentFormData = () => {
     onChangeDate,
     onChangeTitle,
     onChangeDescription,
+    onChangeAudioFile,
   }
 }
