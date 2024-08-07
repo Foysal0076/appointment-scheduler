@@ -20,6 +20,15 @@ const DashboardHome = () => {
   const [isAppointmentFormModalOpen, setIsAppointmentFormModalOpen] =
     useState(false)
 
+  const {
+    data: appointments,
+    isLoading: isLoadingAppointments,
+    isSuccess: isAppointedDataFetched,
+  } = useFetchAppointmentsQuery({
+    past: filters.includes('past'),
+    upcoming: filters.includes('upcoming'),
+  })
+
   const prefetchAppointments = usePrefetchAppointment('fetchAppointments')
   const prefetchUsers = usePrefetchUsers('fetchUsers')
 
@@ -33,14 +42,6 @@ const DashboardHome = () => {
     setSelectedUserId(userId)
     setIsAppointmentFormModalOpen(true)
   }
-  const {
-    data: appointments,
-    isLoading: isLoadingAppointments,
-    isSuccess: isAppointedDataFetched,
-  } = useFetchAppointmentsQuery({
-    past: filters.includes('past'),
-    upcoming: filters.includes('upcoming'),
-  })
 
   useEffect(() => {
     prefetchAppointments({ past: true })

@@ -2,7 +2,7 @@
 
 import AppointmentSummaryCard from '@/components/Common/AppointmentSummaryCard'
 import { Modal } from '@/components/Common/Modal'
-import { useAppointmentConfirmModal } from '@/components/Dashboard/useAppointmentConfirmModal'
+import { useAppointmentConfirmModal } from '@/components/Dashboard/Hooks/useAppointmentConfirmModal'
 import { HOUR_FORMAT } from '@/utils/constants/appointment.constants'
 import { AppointmentUser } from '@/utils/types/appointment.types'
 

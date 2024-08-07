@@ -1,5 +1,5 @@
 'use client'
-import AppointmentCard from '@/components/Common/AppointmentCard'
+import { AppointmentCard } from '@/components/Common/AppointmentCard'
 import { HOUR_FORMAT } from '@/utils/constants/appointment.constants'
 import { useUserInfo } from '@/utils/hooks/useUserInfo'
 import { AppointmentItem } from '@/utils/types/appointment.types'
@@ -19,6 +19,7 @@ const Appointments = ({ appointments }: Props) => {
       </div>
     )
   }
+
   return (
     <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3'>
       {appointments.map((appointment) => (

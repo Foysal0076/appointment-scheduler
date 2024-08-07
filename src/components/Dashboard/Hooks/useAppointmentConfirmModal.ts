@@ -42,7 +42,7 @@ export const useAppointmentConfirmModal = (
       const endTime = _endTime.getTime()
 
       const audioLink = await onUploadAudio()
-      console.log({ audioLink })
+
       const _formData: PostAppointmentBody = {
         title,
         audioMessage: audioLink,

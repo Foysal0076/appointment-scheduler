@@ -1,6 +1,6 @@
 'use client'
+import { useAppointmentStatusFilter } from '@/components/Dashboard/Hooks/useAppointmentStatusFilter'
 import StatusPill from '@/components/Dashboard/StatusPill'
-import { useAppointmentStatusFilter } from '@/components/Dashboard/useAppointmentStatusFilter'
 import { AppointmentFiltersType } from '@/utils/types/appointment.types'
 
 type Props = {

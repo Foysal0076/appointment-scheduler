@@ -1,26 +1,17 @@
-import { useState } from 'react'
-import { toast } from 'react-toastify'
+import { useMemo } from 'react'
 
+import { useAppointmentCard } from '@/components/Common/AppointmentCard/useAppointmentCard'
 import AppointmentCardStatusPill from '@/components/Common/AppointmentCardStatusPill'
 import OutlinedButton from '@/components/Common/OutlinedButton'
-import { PutAppointmentBody } from '@/redux/apiQueries/apiQueries.type'
-import {
-  useDeleteAppointmentMutation,
-  useUpdateAppointmentMutation,
-} from '@/redux/apiQueries/appointmentQueries'
 import { formatDate, formatTime } from '@/utils/helpers'
-import {
-  AppointmentItem,
-  AppointmentStatusType,
-  HourFormat,
-} from '@/utils/types/appointment.types'
+import { AppointmentItem, HourFormat } from '@/utils/types/appointment.types'
 
 type AppointmentCardProps = AppointmentItem & {
   userId: string
   hourFormat?: HourFormat
 }
 
-const AppointmentCard = ({
+export const AppointmentCard = ({
   id,
   title,
   description,
@@ -34,63 +25,16 @@ const AppointmentCard = ({
 }: AppointmentCardProps) => {
   const isHost = hostInfo.id === userId
   const isRejected = status === 'rejected'
-  const isPast = new Date().getTime() > endTime
+  const isPast = useMemo(() => new Date().getTime() > endTime, [endTime])
 
-  const [updateAppointment, { isLoading: isUpdatingAppointment }] =
-    useUpdateAppointmentMutation()
-
-  const [deleteAppointment, { isLoading: isDeletingAppointment }] =
-    useDeleteAppointmentMutation()
-
-  const [loadingStatus, setLoadingStatus] =
-    useState<AppointmentStatusType | null>(null)
-
-  const onCancelAppointment = async () => {
-    try {
-      //check if the meeting is already started
-      const currentTime = new Date().getTime()
-      if (currentTime > startTime) {
-        toast.error('You can not cancel a meeting that is past current time')
-        return
-      }
-      console.log('cancel appointment')
-      const body: PutAppointmentBody = {
-        id,
-        status: 'cancelled',
-      }
-      await updateAppointment(body)
-    } catch (error) {
-      console.log(error)
-      toast.error('Something went wrong')
-    }
-  }
-
-  const onAcceptOrDeclineAppointment = async (
-    status: AppointmentStatusType
-  ) => {
-    try {
-      setLoadingStatus(status)
-      const body: PutAppointmentBody = {
-        id,
-        status,
-      }
-      await updateAppointment(body)
-    } catch (error) {
-      console.log(error)
-      toast.error('Something went wrong')
-    } finally {
-      setLoadingStatus(null)
-    }
-  }
-
-  const onDeleteAppointment = async () => {
-    try {
-      await deleteAppointment(id)
-    } catch (error) {
-      console.log(error)
-      toast.error('Something went wrong')
-    }
-  }
+  const {
+    loadingStatus,
+    isUpdatingAppointment,
+    isDeletingAppointment,
+    onCancelAppointment,
+    onAcceptOrDeclineAppointment,
+    onDeleteAppointment,
+  } = useAppointmentCard(id, startTime)
 
   return (
     <div className='relative flex h-full flex-col justify-between gap-4 rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
@@ -160,5 +104,3 @@ const AppointmentCard = ({
     </div>
   )
 }
-
-export default AppointmentCard

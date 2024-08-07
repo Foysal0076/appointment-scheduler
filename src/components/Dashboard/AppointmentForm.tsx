@@ -12,11 +12,11 @@ import { Input } from '@/components/Common/Input'
 import OutlinedButton from '@/components/Common/OutlinedButton'
 import AppointmentConfirmModal from '@/components/Dashboard/AppointmentConfirmModal'
 import AudioMessage from '@/components/Dashboard/AudioMessage'
-import { useAppointmentFormData } from '@/components/Dashboard/useAppointmentFormData'
+import { useAppointmentFormData } from '@/components/Dashboard/Hooks/useAppointmentFormData'
 import { useFetchUsersQuery } from '@/redux/apiQueries/userQueries'
+import { MEETING_DURATION_OPTIONS } from '@/utils/constants/appointment.constants'
 import { filterPassedTime } from '@/utils/helpers'
 import { useUserInfo } from '@/utils/hooks/useUserInfo'
-import { Appointment } from '@/utils/types/appointment.types'
 
 const customStyles = {
   menuPortal: (base: any) => ({ ...base, zIndex: 99999 }),
@@ -31,42 +31,15 @@ const reactSelectTheme = (theme: any) => ({
   },
 })
 
-const durationOptions = [
-  {
-    label: '30 minutes',
-    value: '30',
-  },
-  {
-    label: '1 hour',
-    value: '60',
-  },
-  {
-    label: '1 hour 30 minutes',
-    value: '90',
-  },
-  {
-    label: '2 hours',
-    value: '120',
-  },
-  {
-    label: '2 hours 30 minutes',
-    value: '150',
-  },
-  {
-    label: '3 hours',
-    value: '180',
-  },
-]
-
 type Props = {
   userId: string | null
-  appointment?: Appointment
   onCancel: () => void
 }
 
-const AppointmentForm = ({ userId, appointment, onCancel }: Props) => {
-  const isEdit = !!appointment
+const AppointmentForm = ({ userId, onCancel }: Props) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const [options, setOptions] = useState<any[]>([])
+
   const { data: userResponse, isLoading: isFetchingUsers } = useFetchUsersQuery(
     {}
   )
@@ -97,8 +70,6 @@ const AppointmentForm = ({ userId, appointment, onCancel }: Props) => {
   }
   const handleCloseConfirmModal = () => setIsConfirmModalOpen(false)
 
-  const [options, setOptions] = useState<any[]>([])
-
   useEffect(() => {
     if (Array.isArray(userResponse)) {
       //filter current user
@@ -116,7 +87,7 @@ const AppointmentForm = ({ userId, appointment, onCancel }: Props) => {
 
   return (
     <div className='w-[85vw] md:max-w-lg'>
-      <h2 className='h3 mb-8'>{isEdit ? 'Edit' : 'Create'} Meeting</h2>
+      <h2 className='h3 mb-8'>Create Meeting</h2>
       <div className='gap- flex flex-col gap-6'>
         <div className='flex flex-col'>
           <label htmlFor='guest-select' className='mb-2 font-bold'>
@@ -160,7 +131,7 @@ const AppointmentForm = ({ userId, appointment, onCancel }: Props) => {
             id='duration'
             className='rounded bg-surface-100'
             onChange={onChangeDuration}>
-            {durationOptions.map((option) => (
+            {MEETING_DURATION_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
