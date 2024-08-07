@@ -35,6 +35,13 @@ export const appointmentQueries = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Appointments'],
     }),
+    deleteAppointment: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/appointments/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Appointments'],
+    }),
   }),
 })
 
@@ -42,4 +49,6 @@ export const {
   useFetchAppointmentsQuery,
   useCreateAppointmentMutation,
   useUpdateAppointmentMutation,
+  useDeleteAppointmentMutation,
+  usePrefetch: usePrefetchAppointment,
 } = appointmentQueries

@@ -13,11 +13,11 @@ export type PostAppointmentBody = {
   guestInfo: AppointmentUser
   status: AppointmentStatusType
   title: string
+  description: string
   startTime: number // Date.getTime()
   endTime: number // Date.getTime()
 }
 
-export type PutAppointmentBody = {
-  title: string
-  status: AppointmentStatusType
+export type PutAppointmentBody = Partial<PostAppointmentBody> & {
+  id: string
 }

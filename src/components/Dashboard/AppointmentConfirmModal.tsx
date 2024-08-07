@@ -18,6 +18,7 @@ type Props = {
   handleCloseParentModal: () => void
   formData: {
     title: string
+    description: string
     guest: { value: string; label: string }
     duration: number
     date: Date
@@ -58,6 +59,7 @@ const AppointmentConfirmModal = ({
 
       const _formData: PostAppointmentBody = {
         title,
+        description: formData.description,
         startTime,
         endTime,
         guestId: formData.guest.value,

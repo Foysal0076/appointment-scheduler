@@ -1,16 +1,17 @@
 import {
   collection,
+  deleteDoc,
   doc,
   documentId,
   getDoc,
   getDocs,
   limit,
-  orderBy,
   query,
   setDoc,
   where,
 } from 'firebase/firestore'
 
+import { PutAppointmentBody } from '@/redux/apiQueries/apiQueries.type'
 import { db } from '@/utils/firebase'
 import { capitalize } from '@/utils/helpers'
 import { AppointmentItem } from '@/utils/types/appointment.types'
@@ -80,41 +81,96 @@ export const getAppointments = async ({
   isUpcoming?: boolean
   isPast?: boolean
 }) => {
+  // try {
+  //   const getAll = (!isPast && !isUpcoming) || (isPast && isUpcoming)
+  //   const appointmentRef = collection(db, 'appointments')
+
+  //   const q = getAll
+  //     ? query(
+  //         appointmentRef,
+  //         where('hostId', '==', hostId),
+  //         orderBy('startTime', 'asc')
+  //       )
+  //     : isPast
+  //       ? query(
+  //           appointmentRef,
+  //           where('hostId', '==', hostId),
+  //           where('endTime', '<', new Date().getTime()),
+  //           orderBy('startTime', 'asc')
+  //         )
+  //       : query(
+  //           appointmentRef,
+  //           where('hostId', '==', hostId),
+  //           where('endTime', '>', new Date().getTime()),
+  //           orderBy('startTime', 'asc')
+  //         )
+  //   // const q = query(appointmentRef, where('hostId', '==', hostId))
+  //   const querySnapshot = await getDocs(q)
+  //   const result: any[] = []
+
+  //   querySnapshot.forEach(async (doc) => {
+  //     const id = doc.id
+  //     const data = doc.data()
+  //     result.push({ ...data, id })
+  //   })
+  //   return result
+  // } catch (error) {
+  //   console.error('Error getting appointments: ', error)
+  //   throw error
+  // }
   try {
     const getAll = (!isPast && !isUpcoming) || (isPast && isUpcoming)
     const appointmentRef = collection(db, 'appointments')
 
-    const q = getAll
-      ? query(
-          appointmentRef,
-          where('hostId', '==', hostId),
-          orderBy('startTime', 'asc')
-        )
+    const hostQuery = getAll
+      ? query(appointmentRef, where('hostId', '==', hostId))
       : isPast
         ? query(
             appointmentRef,
             where('hostId', '==', hostId),
-            where('endTime', '<', new Date().getTime()),
-            orderBy('startTime', 'asc')
+            where('endTime', '<', new Date().getTime())
           )
         : query(
             appointmentRef,
             where('hostId', '==', hostId),
-            where('endTime', '>', new Date().getTime()),
-            orderBy('startTime', 'asc')
+            where('endTime', '>', new Date().getTime())
           )
-    // const q = query(appointmentRef, where('hostId', '==', hostId))
-    const querySnapshot = await getDocs(q)
+
+    const guestQuery = getAll
+      ? query(appointmentRef, where('guestId', '==', hostId))
+      : isPast
+        ? query(
+            appointmentRef,
+            where('guestId', '==', hostId),
+            where('endTime', '<', new Date().getTime())
+          )
+        : query(
+            appointmentRef,
+            where('guestId', '==', hostId),
+            where('endTime', '>', new Date().getTime())
+          )
+
+    const [hostSnapshot, guestSnapshot] = await Promise.all([
+      getDocs(hostQuery),
+      getDocs(guestQuery),
+    ])
+
     const result: any[] = []
 
-    querySnapshot.forEach(async (doc) => {
-      const id = doc.id
-      const data = doc.data()
-      result.push({ ...data, id })
+    hostSnapshot.forEach((doc) => {
+      result.push({ id: doc.id, ...doc.data() })
     })
+
+    guestSnapshot.forEach((doc) => {
+      result.push({ id: doc.id, ...doc.data() })
+    })
+
+    // Optionally, sort the combined results by startTime
+    result.sort((a, b) => a.startTime - b.startTime)
+
     return result
   } catch (error) {
-    console.error('Error getting appointments: ', error)
+    console.error('Error fetching appointments: ', error)
     throw error
   }
 }
@@ -137,10 +193,12 @@ export const createAppointment = async (data: Omit<AppointmentItem, 'id'>) => {
   }
 }
 
-export const updateAppointment = async (data: any) => {
+export const updateAppointment = async (data: PutAppointmentBody) => {
   try {
-    const docRef = doc(db, 'appointments', data.id)
-    await setDoc(docRef, data, { merge: true })
+    const { id, ...rest } = data
+    const docRef = doc(db, 'appointments', id)
+
+    await setDoc(docRef, { ...rest }, { merge: true })
 
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
@@ -148,8 +206,19 @@ export const updateAppointment = async (data: any) => {
     } else {
       throw new Error('No such document!')
     }
-  } catch (e) {
-    console.error('Error updating document: ', e)
-    throw e
+  } catch (error) {
+    console.error('Error updating document: ', error)
+    throw error
+  }
+}
+
+export const deleteAppointment = async (id: string) => {
+  try {
+    const docRef = doc(db, 'appointments', id)
+    await deleteDoc(docRef)
+    return { message: 'Appointment cancelled' }
+  } catch (error) {
+    console.error('Error deleting document: ', error)
+    throw error
   }
 }

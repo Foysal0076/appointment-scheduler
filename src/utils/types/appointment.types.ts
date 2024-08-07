@@ -34,6 +34,7 @@ export type AppointmentItem = {
   id: string
   status: string
   title: string
+  description: string
   audioMessage?: string
   startTime: number
   endTime: number

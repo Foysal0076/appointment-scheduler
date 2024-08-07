@@ -2,8 +2,15 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 
 import { authOptions } from '@/auth/options'
-import { PostAppointmentBody } from '@/redux/apiQueries/apiQueries.type'
-import { createAppointment, getAppointments } from '@/utils/firebase/queries'
+import {
+  PostAppointmentBody,
+  PutAppointmentBody,
+} from '@/redux/apiQueries/apiQueries.type'
+import {
+  createAppointment,
+  getAppointments,
+  updateAppointment,
+} from '@/utils/firebase/queries'
 import { AppointmentItem } from '@/utils/types/appointment.types'
 
 export async function POST(request: Request) {
@@ -20,11 +27,13 @@ export async function POST(request: Request) {
       startTime,
       status,
       title,
+      description,
       guestInfo,
     }: PostAppointmentBody = await request.json()
 
     const formData: Omit<AppointmentItem, 'id'> = {
       title,
+      description,
       guestId,
       guestInfo,
       startTime,
@@ -69,6 +78,27 @@ export async function GET(request: Request) {
     })
     return NextResponse.json(data)
   } catch (error) {
+    return NextResponse.json(
+      { message: 'Something went wrong' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(request: Request) {
+  //check auth, if no session, return 401
+  const session = await getServerSession(authOptions)
+  if (!session || !session.user) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const formData: PutAppointmentBody = await request.json()
+
+    const data = await updateAppointment(formData)
+    return NextResponse.json(data)
+  } catch (error) {
+    console.log(error)
     return NextResponse.json(
       { message: 'Something went wrong' },
       { status: 500 }

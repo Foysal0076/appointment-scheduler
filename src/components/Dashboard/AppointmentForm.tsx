@@ -77,10 +77,16 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
     onChangeGuest,
     onChangeDate,
     onChangeTitle,
+    onChangeDescription,
   } = useAppointmentFormData()
+
   const handleOpenConfirmModal = () => {
     //check form values
-    if (formData.guest.label === '' || formData.date === null) {
+    if (
+      formData.guest.label === '' ||
+      formData.description === '' ||
+      formData.date === null
+    ) {
       toast.error('Please fill all the fields')
       return
     }
@@ -120,7 +126,20 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
         </div>
         <div className='flex flex-col'>
           <label htmlFor='guest-select' className='mb-2 font-bold'>
-            Select Duration
+            Description <span className='ml-0.5 text-danger-500'>*</span>
+          </label>
+          <textarea
+            name='meeting-description'
+            id='meeting-description'
+            onChange={onChangeDescription}
+            placeholder='Add a description'
+            rows={4}
+            className='w-full resize-none rounded bg-surface-50 dark:bg-surface-200'
+          />
+        </div>
+        <div className='flex flex-col'>
+          <label htmlFor='guest-select' className='mb-2 font-bold'>
+            Select Duration <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <select
             name='duration'
@@ -136,7 +155,7 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
         </div>
         <div className='flex flex-col'>
           <label htmlFor='guest-select' className='mb-2 font-bold'>
-            Select Guest
+            Select Guest <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <Select
             className='custom-react-select-container'
@@ -156,7 +175,8 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
         </div>
         <div className='flex flex-col gap-2'>
           <label htmlFor='date' className='font-bold'>
-            Select Date and Time
+            Select Date and Time{' '}
+            <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <DatePicker
             className='w-full rounded bg-surface-100'

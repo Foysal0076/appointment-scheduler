@@ -1,7 +1,18 @@
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+
 import OutlinedButton from '@/components/Common/OutlinedButton'
-import { HOUR_FORMAT } from '@/utils/constants/appointment.constants'
+import { PutAppointmentBody } from '@/redux/apiQueries/apiQueries.type'
+import {
+  useDeleteAppointmentMutation,
+  useUpdateAppointmentMutation,
+} from '@/redux/apiQueries/appointmentQueries'
 import { formatDate, formatTime } from '@/utils/helpers'
-import { AppointmentItem, HourFormat } from '@/utils/types/appointment.types'
+import {
+  AppointmentItem,
+  AppointmentStatusType,
+  HourFormat,
+} from '@/utils/types/appointment.types'
 
 type AppointmentCardProps = AppointmentItem & {
   userId: string
@@ -11,63 +22,133 @@ type AppointmentCardProps = AppointmentItem & {
 const AppointmentCard = ({
   id,
   title,
+  description,
   hostInfo,
   guestInfo,
   userId,
   status,
   startTime,
   endTime,
-  hourFormat = HOUR_FORMAT.h12,
 }: AppointmentCardProps) => {
   const isHost = hostInfo.id === userId
   const isRejected = status === 'rejected'
+  const isPast = new Date().getTime() > endTime
+
+  const [updateAppointment, { isLoading: isUpdatingAppointment }] =
+    useUpdateAppointmentMutation()
+
+  const [deleteAppointment, { isLoading: isDeletingAppointment }] =
+    useDeleteAppointmentMutation()
+
+  const [loadingStatus, setLoadingStatus] =
+    useState<AppointmentStatusType | null>(null)
+
+  const onCancelAppointment = async () => {
+    try {
+      //check if the meeting is already started
+      const currentTime = new Date().getTime()
+      if (currentTime > startTime) {
+        toast.error('You can not cancel a meeting that is past current time')
+        return
+      }
+      console.log('cancel appointment')
+      const body: PutAppointmentBody = {
+        id,
+        status: 'cancelled',
+      }
+      await updateAppointment(body)
+    } catch (error) {
+      console.log(error)
+      toast.error('Something went wrong')
+    }
+  }
+
+  const onAcceptOrDeclineAppointment = async (
+    status: AppointmentStatusType
+  ) => {
+    try {
+      setLoadingStatus(status)
+      const body: PutAppointmentBody = {
+        id,
+        status,
+      }
+      await updateAppointment(body)
+    } catch (error) {
+      console.log(error)
+      toast.error('Something went wrong')
+    } finally {
+      setLoadingStatus(null)
+    }
+  }
+
+  const onDeleteAppointment = async () => {
+    try {
+      console.log({ id })
+      await deleteAppointment(id)
+    } catch (error) {
+      console.log(error)
+      toast.error('Something went wrong')
+    }
+  }
 
   return (
-    <div className='flex h-full flex-col justify-between rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
+    <div className='flex h-full flex-col justify-between gap-4 rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
       <div className='grow'>
         <h2 className='h3 mb-2'>{formatDate(startTime)}</h2>
         <p className='h5 mb-4 font-bold'>
           {formatTime(startTime)} - {formatTime(endTime)}
         </p>
         <h3 className='h6 mb-4'>{title}</h3>
-        <p className='mb-4 text-sm text-neutral-700'>
-          {isHost && isRejected
-            ? `${guestInfo.fullname} rejected this appointment`
-            : `Participants: ${hostInfo.fullname} and ${guestInfo.fullname}`}
+        <p className='mb-4 line-clamp-4 text-base text-neutral-400'>
+          {description}
         </p>
       </div>
-      <div className='flex justify-between gap-4'>
-        {isHost ? (
-          <>
-            <OutlinedButton color='danger' size='sm'>
-              Delete
-            </OutlinedButton>
-            <OutlinedButton
-              color='danger'
-              size='sm'
-              disabled={status === 'cancelled'}>
-              Cancel
-            </OutlinedButton>
-            <OutlinedButton color='tertiary' size='sm'>
-              Edit
-            </OutlinedButton>
-          </>
-        ) : (
-          <>
-            <OutlinedButton
-              color='danger'
-              size='sm'
-              disabled={status === 'rejected'}>
-              Decline
-            </OutlinedButton>
-            <OutlinedButton
-              color='success'
-              size='sm'
-              disabled={status === 'approved'}>
-              {status === 'approved' ? 'Accepted' : 'Accept'}
-            </OutlinedButton>
-          </>
-        )}
+      <div>
+        <p className='mb-4 text-xs text-neutral-700 md:text-sm'>
+          {isHost && isRejected
+            ? `${guestInfo.fullname} rejected this appointment`
+            : `Participants: ${hostInfo.fullname}, ${guestInfo.fullname}`}
+        </p>
+        <div className='flex justify-between gap-4'>
+          {isHost ? (
+            <>
+              <OutlinedButton
+                onClick={onDeleteAppointment}
+                color='danger'
+                size='sm'
+                loading={isDeletingAppointment}>
+                Delete
+              </OutlinedButton>
+              <OutlinedButton
+                onClick={onCancelAppointment}
+                color='danger'
+                size='sm'
+                disabled={status === 'cancelled' || isPast}
+                loading={isUpdatingAppointment}>
+                {status === 'cancelled' ? 'Cancelled' : 'Cancel'}
+              </OutlinedButton>
+            </>
+          ) : (
+            <>
+              <OutlinedButton
+                onClick={() => onAcceptOrDeclineAppointment('rejected')}
+                color='danger'
+                size='sm'
+                disabled={status === 'rejected' || isPast}
+                loading={loadingStatus === 'rejected'}>
+                Decline
+              </OutlinedButton>
+              <OutlinedButton
+                onClick={() => onAcceptOrDeclineAppointment('approved')}
+                color='success'
+                size='sm'
+                disabled={status === 'approved' || isPast}
+                loading={loadingStatus === 'approved'}>
+                {status === 'approved' ? 'Accepted' : 'Accept'}
+              </OutlinedButton>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

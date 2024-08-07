@@ -12,6 +12,13 @@ const Appointments = ({ appointments }: Props) => {
   const { user } = useUserInfo()
   const userId = user?.id as unknown as string
 
+  if (appointments.length === 0) {
+    return (
+      <div className='flex h-32 items-center justify-center'>
+        <p className='text-lg text-neutral-500'>No appointments found</p>
+      </div>
+    )
+  }
   return (
     <div className='grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 2xl:grid-cols-4'>
       {appointments.map((appointment) => (
