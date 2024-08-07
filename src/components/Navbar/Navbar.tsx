@@ -12,9 +12,11 @@ export const Navbar = () => {
       <nav
         className='flex w-full items-center justify-between px-4 md:px-8'
         aria-label='Main navigation'>
-        <div className='tracking-tighter'>
-          <Link href='/' className='h5 font-extrabold text-primary-400'>
-            Home
+        <div className='tracking-wide'>
+          <Link
+            href='/'
+            className='h5 font-extrabold uppercase text-primary-400'>
+            Scheduler
           </Link>
         </div>
         <div className='flex gap-4'>

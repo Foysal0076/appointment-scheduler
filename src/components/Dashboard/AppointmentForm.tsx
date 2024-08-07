@@ -90,7 +90,7 @@ const AppointmentForm = ({ userId, appointment, onCancel }: Props) => {
       formData.description === '' ||
       formData.date === null
     ) {
-      toast.error('Please fill all the fields')
+      toast.error('Please fill all the required fields')
       return
     }
     setIsConfirmModalOpen(true)
