@@ -11,7 +11,7 @@ type Props = {
 const Appointments = ({ appointments }: Props) => {
   const { user } = useUserInfo()
   const userId = user?.id as unknown as string
-  console.log(appointments)
+
   if (appointments.length === 0) {
     return (
       <div className='flex h-32 items-center justify-center'>
@@ -20,7 +20,7 @@ const Appointments = ({ appointments }: Props) => {
     )
   }
   return (
-    <div className='grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 2xl:grid-cols-4'>
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3'>
       {appointments.map((appointment) => (
         <AppointmentCard
           key={appointment.id}

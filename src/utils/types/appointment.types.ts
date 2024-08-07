@@ -32,7 +32,7 @@ export type Appointment = {
 
 export type AppointmentItem = {
   id: string
-  status: string
+  status: AppointmentStatusType
   title: string
   description: string
   audioMessage?: string

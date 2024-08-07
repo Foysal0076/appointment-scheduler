@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
+import AppointmentCardStatusPill from '@/components/Common/AppointmentCardStatusPill'
 import OutlinedButton from '@/components/Common/OutlinedButton'
 import { PutAppointmentBody } from '@/redux/apiQueries/apiQueries.type'
 import {
@@ -84,7 +85,6 @@ const AppointmentCard = ({
 
   const onDeleteAppointment = async () => {
     try {
-      console.log({ id })
       await deleteAppointment(id)
     } catch (error) {
       console.log(error)
@@ -93,7 +93,10 @@ const AppointmentCard = ({
   }
 
   return (
-    <div className='flex h-full flex-col justify-between gap-4 rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
+    <div className='relative flex h-full flex-col justify-between gap-4 rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
+      <div className='absolute right-2 top-2'>
+        <AppointmentCardStatusPill status={status} />
+      </div>
       <div className='grow'>
         <h2 className='h3 mb-2'>{formatDate(startTime)}</h2>
         <p className='h5 mb-4 font-bold'>
@@ -125,7 +128,7 @@ const AppointmentCard = ({
               </OutlinedButton>
               <OutlinedButton
                 onClick={onCancelAppointment}
-                color='danger'
+                color='tertiary'
                 size='sm'
                 disabled={status === 'cancelled' || isPast}
                 loading={isUpdatingAppointment}>
