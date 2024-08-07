@@ -5,7 +5,7 @@ import { authOptions } from '@/auth/options'
 
 const DashboardLayout = async ({ children }: any) => {
   const session = await getServerSession(authOptions)
-  console.log(session)
+
   if (!session || !session.accessToken) {
     return redirect('/auth/login')
   }

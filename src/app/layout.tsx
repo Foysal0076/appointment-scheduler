@@ -9,6 +9,7 @@ import { AuthProvider } from '@/auth/AuthProvider'
 import NextThemeProvider from '@/components/Common/NextThemeProvider'
 import { Footer } from '@/components/Footer'
 import { Navbar } from '@/components/Navbar'
+import { ReduxProvider } from '@/redux/ReduxProvider'
 import { PROJECT_INFORMATION } from '@/utils/constants'
 
 const inter = Inter({
@@ -46,13 +47,15 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <NextThemeProvider>
-            <div className='flex min-h-screen flex-col justify-between bg-surface-50 pt-[3.75rem] md:pt-[4.5rem]'>
-              <div>
-                <Navbar />
-                <main>{children}</main>
+            <ReduxProvider>
+              <div className='flex min-h-screen flex-col justify-between bg-surface-50 pt-[3.75rem] md:pt-[4.5rem]'>
+                <div>
+                  <Navbar />
+                  <main>{children}</main>
+                </div>
+                <Footer />
               </div>
-              <Footer />
-            </div>
+            </ReduxProvider>
           </NextThemeProvider>
         </AuthProvider>
         <ToastContainer

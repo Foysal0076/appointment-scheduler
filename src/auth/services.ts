@@ -1,7 +1,8 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
 import { auth } from '@/utils/firebase'
-import { queryUserById } from '@/utils/firebase/queries'
+import { getUserById } from '@/utils/firebase/queries'
+import { capitalize } from '@/utils/helpers'
 
 const authenticateUser = async (email: string, password: string) => {
   if (!email || !password) return
@@ -10,7 +11,7 @@ const authenticateUser = async (email: string, password: string) => {
   const userCredential = await signInWithEmailAndPassword(auth, email, password)
 
   // userInfo from database
-  const userInfo: any = await queryUserById(userCredential.user.uid)
+  const userInfo: any = await getUserById(userCredential.user.uid)
 
   const username: string = userInfo.length > 0 ? userInfo[0].fullname : 'N/A'
 
@@ -24,7 +25,7 @@ const authenticateUser = async (email: string, password: string) => {
 
   return {
     id: userCredential.user.uid,
-    name: username,
+    name: capitalize(username),
     email: userCredential.user.email,
     accessToken,
   }

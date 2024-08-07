@@ -8,10 +8,10 @@ export const useAppointmentStatusFilter = (
   setValues: (value: AppointmentFiltersType[]) => void
 ) => {
   const onClick = (status: AppointmentFiltersType) => {
-    if (status === 'all' && !values.includes(status)) {
-      setValues([...filters])
-      return
-    }
+    // if (status === 'all' && !values.includes(status)) {
+    //   setValues([...filters])
+    //   return
+    // }
     if (values.includes(status)) {
       setValues(values.filter((value) => value !== status))
     } else {

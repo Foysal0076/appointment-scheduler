@@ -25,9 +25,12 @@ export const createInitials = (name: string = '', length: 1 | 2 = 2) => {
 }
 
 export const formatTime = (
-  dateTime: Date,
+  dateTime: Date | number,
   hourFormat: HourFormat = HOUR_FORMAT.h12
 ) => {
+  if (typeof dateTime === 'number') {
+    dateTime = new Date(dateTime)
+  }
   return dateTime.toLocaleTimeString(undefined, {
     hour: '2-digit',
     minute: '2-digit',
@@ -35,7 +38,10 @@ export const formatTime = (
   })
 }
 
-export const formatDate = (dateTime: Date) => {
+export const formatDate = (dateTime: Date | number) => {
+  if (typeof dateTime === 'number') {
+    dateTime = new Date(dateTime)
+  }
   return dateTime.toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric',
@@ -65,4 +71,8 @@ export const filterPassedTime = (time: Date): boolean => {
   const selectedDate = new Date(time)
 
   return currentDate.getTime() < selectedDate.getTime()
+}
+
+export const capitalize = (str: string) => {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase())
 }

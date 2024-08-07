@@ -12,8 +12,10 @@ import { Input } from '@/components/Common/Input'
 import OutlinedButton from '@/components/Common/OutlinedButton'
 import AppointmentConfirmModal from '@/components/Dashboard/AppointmentConfirmModal'
 import { useAppointmentFormData } from '@/components/Dashboard/useAppointmentFormData'
+import { useFetchUsersQuery } from '@/redux/apiQueries/userQueries'
 import { filterPassedTime } from '@/utils/helpers'
-import { Appointment, AppointmentUser } from '@/utils/types/appointment.types'
+import { useUserInfo } from '@/utils/hooks/useUserInfo'
+import { Appointment } from '@/utils/types/appointment.types'
 
 const customStyles = {
   menuPortal: (base: any) => ({ ...base, zIndex: 99999 }),
@@ -63,6 +65,11 @@ type Props = {
 const AppointmentForm = ({ appointment, onCancel }: Props) => {
   const isEdit = !!appointment
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const { data: userResponse, isLoading: isFetchingUsers } = useFetchUsersQuery(
+    {}
+  )
+
+  const { user } = useUserInfo()
 
   const {
     formData,
@@ -71,7 +78,6 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
     onChangeDate,
     onChangeTitle,
   } = useAppointmentFormData()
-
   const handleOpenConfirmModal = () => {
     //check form values
     if (formData.guest.label === '' || formData.date === null) {
@@ -82,23 +88,20 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
   }
   const handleCloseConfirmModal = () => setIsConfirmModalOpen(false)
 
-  const [users, setUsers] = useState<AppointmentUser[]>([
-    { id: '1', name: 'Guest 1', email: 'guest1@test.com' },
-    { id: '2', name: 'Guest 2', email: 'guest2@test.com' },
-    { id: '3', name: 'Guest 3', email: 'guest3@test.com' },
-  ])
-
   const [options, setOptions] = useState<any[]>([])
 
-  console.log(formData)
-
   useEffect(() => {
-    const options = users.map((user) => ({
-      label: user.name,
-      value: user.id,
-    }))
-    setOptions(options)
-  }, [users])
+    if (Array.isArray(userResponse)) {
+      //filter current user
+      const users = userResponse.filter((u) => u.id !== user?.id)
+      const options = users.map((user) => ({
+        label: user.fullname,
+        value: user.id,
+      }))
+      setOptions(options)
+      onChangeGuest(options[0])
+    }
+  }, [userResponse])
 
   return (
     <div className='w-[85vw] md:max-w-lg'>
@@ -148,6 +151,7 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
             isClearable
             menuPlacement='auto'
             theme={reactSelectTheme}
+            isLoading={isFetchingUsers}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -172,12 +176,18 @@ const AppointmentForm = ({ appointment, onCancel }: Props) => {
           <Button onClick={handleOpenConfirmModal}>Send Invitation</Button>
         </div>
       </div>
-      <AppointmentConfirmModal
-        handleClose={handleCloseConfirmModal}
-        handleCloseParentModal={onCancel}
-        open={isConfirmModalOpen}
-        formData={formData}
-      />
+      {userResponse && (
+        <AppointmentConfirmModal
+          handleClose={handleCloseConfirmModal}
+          handleCloseParentModal={onCancel}
+          open={isConfirmModalOpen}
+          formData={{
+            ...formData,
+            guestInfo:
+              userResponse?.find((u) => u.id === formData.guest.value) ?? null,
+          }}
+        />
+      )}
     </div>
   )
 }

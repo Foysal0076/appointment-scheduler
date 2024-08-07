@@ -6,12 +6,12 @@ export const APPOINTMENT_STATUS = {
 } as const
 
 export const APPOINTMENT_FILTERS = {
-  ALL: 'all',
+  // ALL: 'all',
   UPCOMING: 'upcoming',
   PAST: 'past',
-  PENDING: 'pending',
-  CANCELLED: 'cancelled',
-  REJECTED: 'rejected',
+  // PENDING: 'pending',
+  // CANCELLED: 'cancelled',
+  // REJECTED: 'rejected',
 } as const
 
 export const HOUR_FORMAT = {

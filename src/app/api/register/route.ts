@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     const user = userCredential.user
 
     await setDoc(doc(db, 'users', user.uid), {
-      fullname,
+      fullname: fullname.toLowerCase(),
       email,
     })
 

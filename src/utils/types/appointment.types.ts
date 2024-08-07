@@ -14,7 +14,7 @@ export type HourFormat = (typeof HOUR_FORMAT)[keyof typeof HOUR_FORMAT]
 
 export type AppointmentUser = {
   id: string
-  name: string
+  fullname: string
   email: string
 }
 
@@ -28,4 +28,17 @@ export type Appointment = {
   startTime: Date
   endTime: Date
   hourFormat: HourFormat
+}
+
+export type AppointmentItem = {
+  id: string
+  status: string
+  title: string
+  audioMessage?: string
+  startTime: number
+  endTime: number
+  hostId: string
+  hostInfo: AppointmentUser
+  guestId: string
+  guestInfo: AppointmentUser
 }

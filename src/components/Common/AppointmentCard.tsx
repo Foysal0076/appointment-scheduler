@@ -1,36 +1,25 @@
 import OutlinedButton from '@/components/Common/OutlinedButton'
 import { HOUR_FORMAT } from '@/utils/constants/appointment.constants'
 import { formatDate, formatTime } from '@/utils/helpers'
-import {
-  AppointmentStatusType,
-  AppointmentUser,
-  HourFormat,
-} from '@/utils/types/appointment.types'
+import { AppointmentItem, HourFormat } from '@/utils/types/appointment.types'
 
-type AppointmentCardProps = {
-  title: string
-  host: AppointmentUser // the person who scheduled the appointment
-  guest: AppointmentUser // the person who is invited for the appointment
-  status: AppointmentStatusType
-  startTime: Date
-  endTime: Date
-  appointmentId: string
-  hourFormat?: HourFormat
+type AppointmentCardProps = AppointmentItem & {
   userId: string
+  hourFormat?: HourFormat
 }
 
 const AppointmentCard = ({
-  host,
-  guest,
+  id,
+  title,
+  hostInfo,
+  guestInfo,
   userId,
   status,
   startTime,
   endTime,
-  title,
-  appointmentId,
   hourFormat = HOUR_FORMAT.h12,
 }: AppointmentCardProps) => {
-  const isHost = host.id === userId
+  const isHost = hostInfo.id === userId
   const isRejected = status === 'rejected'
 
   return (
@@ -43,8 +32,8 @@ const AppointmentCard = ({
         <h3 className='h6 mb-4'>{title}</h3>
         <p className='mb-4 text-sm text-neutral-700'>
           {isHost && isRejected
-            ? `${guest.name} rejected this appointment`
-            : `Participants: ${host.name} and ${guest.name}`}
+            ? `${guestInfo.fullname} rejected this appointment`
+            : `Participants: ${hostInfo.fullname} and ${guestInfo.fullname}`}
         </p>
       </div>
       <div className='flex justify-between gap-4'>
