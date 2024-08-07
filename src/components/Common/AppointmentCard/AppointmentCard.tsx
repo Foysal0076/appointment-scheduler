@@ -51,7 +51,7 @@ export const AppointmentCard = ({
           {description}
         </p>
         <div className='mb-4'>
-          {audioMessage && <audio src={audioMessage} controls />}
+          {audioMessage && <audio role='audio' src={audioMessage} controls />}
         </div>
       </div>
       <div>
