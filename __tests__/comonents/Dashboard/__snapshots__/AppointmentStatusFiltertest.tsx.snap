@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppointmentStatusFilter component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-wrap items-center gap-4 max-md:justify-center"
+  >
+    <button
+      class="select-none rounded-full border px-2 py-1 text-sm capitalize transition-colors duration-200 md:text-base border-primary-500 bg-primary-400 text-white"
+      data-testid="filter-status-pill-upcoming"
+    >
+      upcoming
+    </button>
+    <button
+      class="select-none rounded-full border px-2 py-1 text-sm capitalize transition-colors duration-200 md:text-base border-primary-500 bg-primary-400 text-white"
+      data-testid="filter-status-pill-past"
+    >
+      past
+    </button>
+  </div>
+</DocumentFragment>
+`;

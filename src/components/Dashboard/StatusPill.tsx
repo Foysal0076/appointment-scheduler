@@ -9,6 +9,7 @@ type Props = {
 const StatusPill = ({ active, onClick, status }: Props) => {
   return (
     <button
+      data-testid={`filter-status-pill-${status}`}
       onClick={onClick}
       className={clsx(
         'select-none rounded-full border px-2 py-1 text-sm capitalize transition-colors duration-200 md:text-base',
