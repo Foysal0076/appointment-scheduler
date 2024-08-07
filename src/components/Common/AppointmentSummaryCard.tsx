@@ -35,7 +35,7 @@ const AppointmentSummaryCard = ({
     <div className='flex h-full flex-col justify-between rounded-lg border border-neutral-30 bg-surface-0 p-4 shadow-md dark:bg-surface-100'>
       <div className='grow'>
         <h2 className='h3 mb-2'>{formatDate(startTime)}</h2>
-        <p className='h5 mb-4 font-bold'>
+        <p className='h5 mb-4 inline font-bold'>
           {formatTime(startTime, hourFormat)} -{' '}
           {formatTime(endTime, hourFormat)}
         </p>
@@ -44,7 +44,7 @@ const AppointmentSummaryCard = ({
         <div className='mb-4'>
           {audioFile && <audio src={URL.createObjectURL(audioFile)} controls />}
         </div>
-        <p className='mb-4 text-sm text-neutral-700'>
+        <p className='mb-4 inline text-sm text-neutral-700'>
           Participants: {host} and {guest}
         </p>
       </div>
