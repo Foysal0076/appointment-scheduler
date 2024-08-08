@@ -34,7 +34,6 @@ const SearchUser = ({ onCreateAppointmentClick }: Props) => {
 
   const onClearSearchText = () => {
     setSearchText('')
-    console.log('clear')
   }
 
   const handleCloseUserInfoModal = () => {
@@ -55,7 +54,7 @@ const SearchUser = ({ onCreateAppointmentClick }: Props) => {
 
   useEffect(() => {
     if (debouncedSearchText.length > 2) {
-      searchUser({ s: debouncedSearchText }, true)
+      searchUser({ s: debouncedSearchText, hideSelf: true }, true)
     }
   }, [debouncedSearchText])
 

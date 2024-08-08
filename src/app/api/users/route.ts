@@ -16,8 +16,10 @@ export async function GET(request: Request) {
 
     const userId = session.user.id as unknown as string
     const searchText = params.get('s') || ''
+    const hideSelf = params.get('hideSelf') === 'true'
     const data = await searchUser({
-      hostId: userId,
+      userId: userId,
+      hideSelf,
       key: 'fullname',
       value: searchText,
     })

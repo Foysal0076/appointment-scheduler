@@ -29,10 +29,13 @@ export const getUserById = async (id: string) => {
 }
 
 export const searchUser = async ({
+  userId,
+  hideSelf = false,
   key,
   value,
 }: {
-  hostId: string
+  userId: string
+  hideSelf?: boolean
   key: 'fullname' | 'email'
   value: string
 }) => {
@@ -50,12 +53,12 @@ export const searchUser = async ({
         : query(collection(db, 'users'))
 
     const querySnapshot = await getDocs(q)
-    const result: any[] = []
+    const results: any[] = []
     querySnapshot.forEach((doc) => {
       const data = doc.data()
-      result.push({ ...data, id: doc.id, fullname: capitalize(data.fullname) })
+      results.push({ ...data, id: doc.id, fullname: capitalize(data.fullname) })
     })
-    return result
+    return results.filter((user) => (hideSelf ? user.id !== userId : true))
   } catch (e) {
     console.error('Error searching for user: ', e)
     throw e
