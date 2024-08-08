@@ -35,7 +35,7 @@ export type AppointmentItem = {
   status: AppointmentStatusType
   title: string
   description: string
-  audioMessage?: string
+  audioMessage: string | null
   startTime: number
   endTime: number
   hostId: string

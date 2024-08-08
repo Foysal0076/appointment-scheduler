@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const formData: Omit<AppointmentItem, 'id'> = {
       title,
       description,
-      audioMessage,
+      audioMessage: audioMessage || null,
       guestId,
       guestInfo,
       startTime,
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         email: session.user.email as unknown as string,
       },
     }
-
+    console.log(formData)
     const data = await createAppointment(formData)
     return NextResponse.json(data)
   } catch (error) {
