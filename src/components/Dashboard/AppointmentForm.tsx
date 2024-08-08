@@ -90,7 +90,7 @@ const AppointmentForm = ({ userId, onCancel }: Props) => {
       <h2 className='h3 mb-8'>Create Meeting</h2>
       <div className='gap- flex flex-col gap-6'>
         <div className='flex flex-col'>
-          <label htmlFor='guest-select' className='mb-2 font-bold'>
+          <label htmlFor='meeting-title' className='mb-2 font-bold'>
             Title
           </label>
           <Input
@@ -101,7 +101,7 @@ const AppointmentForm = ({ userId, onCancel }: Props) => {
           />
         </div>
         <div className='flex flex-col'>
-          <label htmlFor='guest-select' className='mb-2 font-bold'>
+          <label htmlFor='meeting-description' className='mb-2 font-bold'>
             Description <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <textarea
@@ -114,7 +114,7 @@ const AppointmentForm = ({ userId, onCancel }: Props) => {
           />
         </div>
         <div className='flex flex-col'>
-          <label htmlFor='guest-select' className='mb-2 font-bold'>
+          <label htmlFor='audio-message' className='mb-2 font-bold'>
             Audio message
           </label>
           <AudioMessage
@@ -123,7 +123,7 @@ const AppointmentForm = ({ userId, onCancel }: Props) => {
           />
         </div>
         <div className='flex flex-col'>
-          <label htmlFor='guest-select' className='mb-2 font-bold'>
+          <label htmlFor='duration' className='mb-2 font-bold'>
             Select Duration <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <select
@@ -143,6 +143,7 @@ const AppointmentForm = ({ userId, onCancel }: Props) => {
             Select Guest <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <Select
+            aria-label='Select Guest'
             className='custom-react-select-container'
             classNamePrefix='custom-react-select'
             value={formData.guest}
@@ -163,6 +164,7 @@ const AppointmentForm = ({ userId, onCancel }: Props) => {
             <span className='ml-0.5 text-danger-500'>*</span>
           </label>
           <DatePicker
+            id='date'
             className='w-full rounded bg-surface-100'
             selected={formData.date}
             onChange={onChangeDate}

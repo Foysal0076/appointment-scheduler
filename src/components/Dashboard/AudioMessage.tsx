@@ -18,7 +18,10 @@ const AudioMessage = ({ setAudioFile, audioFile }: Props) => {
   }
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div
+      className='flex flex-col gap-4'
+      id='audio-message'
+      data-testid='audio-message-input'>
       {audioFile ? (
         <div className='flex items-center gap-4'>
           <audio src={URL.createObjectURL(audioFile)} controls />
