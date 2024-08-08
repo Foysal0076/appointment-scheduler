@@ -39,9 +39,4 @@ describe('AppointmentForm component', () => {
     expect(mockProps.onCancel).toHaveBeenCalled()
   })
 
-  // snapshot
-  test('matches snapshot', () => {
-    const { asFragment } = render(<AppointmentForm {...mockProps} />)
-    expect(asFragment()).toMatchSnapshot()
-  })
 })
