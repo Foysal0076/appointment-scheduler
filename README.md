@@ -2,6 +2,19 @@
 
 ## Getting Started
 
+### Dockerized way to run the application
+This command will pull the docker image from the docker hub and run the application in the container.
+```bash
+docker-compose up
+```
+If you want to build the image locally, you can run the following command:
+
+```bash
+docker-compose up --build
+```
+
+### Standard Development Server
+
 Create .env.local file in the root directory and add the content of .env.example file to it.
 
 Then, run the development server:

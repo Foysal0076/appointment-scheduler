@@ -1,0 +1,13 @@
+services:
+  app:
+    image: foysal0075/appointment-scheduler:v1.1
+    container_name: appointment-scheduler
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: aslkjgfhosdhfg7346524903wrhfkjhgf$#%k45*9*%^
